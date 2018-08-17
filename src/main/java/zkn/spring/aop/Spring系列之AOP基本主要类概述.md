@@ -1,23 +1,23 @@
-在这篇文章中我将对自己了解的AOP中的基本主要类做一个概述，可能不包括一些AOP高级用法的类以及是自己还不了解的类。会不定期的进行补充和修改。
-##SpringAOP基础解析类
-|类名|作用概述|
-|---------|---------|
-|AopNamespaceHandler|AOP命名空间解析类。我们在用AOP的时候，会在Spring配置文件的beans标签中引入：xmlns:aop |
-|AspectJAutoProxyBeanDefinitionParser|解析&lt;aop:aspectj-autoproxy /&gt;标签的类。在AopNamespaceHandler中创建的类。|
-|ConfigBeanDefinitionParser|解析&lt;aop:config /> 标签的类。同样也是在AopNamespaceHandler中创建的类。|
-|AopNamespaceUtils|AOP命名空间解析工具类，在上面两个中被引用。|
-|AopConfigUtils|AOP配置工具类。主要是向Spring容器中注入可以生成Advisor和创建代理对象的bean|
-##AOP联盟中定义的一些类：
-|类名|作用概述|
-|----|----|
-|Advice|AOP联盟中的一个标识接口。通知和Interceptor顶级类。我们说的各种通知类型都要实现这个接口。|
-|Interceptor|AOP联盟中进行方法拦截的一个标识接口。是Advice的子类。|
-|MethodInterceptor|方法拦截器。是Interceptor的一个重要子类。主要方法：invoke。入参为：MethodInvocation|
-|ConstructorInterceptor|构造方法拦截器。是Interceptor的另一个重要的子类。在AOP联盟中是可以对构造方法进行拦截的。这样的场景我们应该很少用到。主要方法为:construct入参为ConstructorInvocation|
-|Joinpoint|AOP联盟中的连接点类。主要的方法是：proceed()执行下一个拦截器。getThis()获取目标对象。|
-|Invocation|AOP拦截的执行类。是Joinpoint的子类。主要方法：getArguments()获取参数。|
-|MethodInvocation|Invocation的一个重要实现类。真正执行AOP方法的拦截。主要方法：getMethod()目标方法。|
-|ConstructorInvocation|Invocation的另一个重要实现类。执行构造方法的拦截。主要方法：getConstructor()返回构造方法。|
+  在这篇文章中我将对自己了解的AOP中的基本主要类做一个概述，可能不包括一些AOP高级用法的类以及是自己还不了解的类。会不定期的进行补充和修改。  
+##SpringAOP基础解析类  
+|  类名  |  作用概述  |  
+|---------|---------|  
+|AopNamespaceHandler|AOP命名空间解析类。我们在用AOP的时候，会在Spring配置文件的beans标签中引入：xmlns:aop |  
+|AspectJAutoProxyBeanDefinitionParser|解析&lt;aop:aspectj-autoproxy /&gt;标签的类。在AopNamespaceHandler中创建的类。|  
+|ConfigBeanDefinitionParser|解析&lt;aop:config /> 标签的类。同样也是在AopNamespaceHandler中创建的类。|  
+|AopNamespaceUtils|AOP命名空间解析工具类，在上面两个中被引用。|  
+|AopConfigUtils|AOP配置工具类。主要是向Spring容器中注入可以生成Advisor和创建代理对象的bean|  
+##AOP联盟中定义的一些类：  
+|类名|作用概述|  
+|----|----|  
+|Advice|AOP联盟中的一个标识接口。通知和Interceptor顶级类。我们说的各种通知类型都要实现这个接口。|  
+|Interceptor|AOP联盟中进行方法拦截的一个标识接口。是Advice的子类。|  
+|MethodInterceptor|方法拦截器。是Interceptor的一个重要子类。主要方法：invoke。入参为：MethodInvocation|  
+|ConstructorInterceptor|构造方法拦截器。是Interceptor的另一个重要的子类。在AOP联盟中是可以对构造方法进行拦截的。这样的场景我们应该很少用到。主要方法为:construct入参为ConstructorInvocation|  
+|Joinpoint|AOP联盟中的连接点类。主要的方法是：proceed()执行下一个拦截器。getThis()获取目标对象。|  
+|Invocation|AOP拦截的执行类。是Joinpoint的子类。主要方法：getArguments()获取参数。|  
+|MethodInvocation|Invocation的一个重要实现类。真正执行AOP方法的拦截。主要方法：getMethod()目标方法。|  
+|ConstructorInvocation|Invocation的另一个重要实现类。执行构造方法的拦截。主要方法：getConstructor()返回构造方法。|  
 ![Advice](//img-blog.csdn.net/20180318112954851?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3prbnh4/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 
 ##SpringAOP中定义的类

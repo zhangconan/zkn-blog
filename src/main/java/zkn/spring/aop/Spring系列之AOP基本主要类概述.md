@@ -8,8 +8,10 @@
 |AspectJAutoProxyBeanDefinitionParser|解析&lt;aop:aspectj-autoproxy /&gt;标签的类。在AopNamespaceHandler中创建的类。|
 |ConfigBeanDefinitionParser|解析&lt;aop:config /> 标签的类。同样也是在AopNamespaceHandler中创建的类。|
 |AopNamespaceUtils|AOP命名空间解析工具类，在上面两个中被引用。|
-|AopConfigUtils|AOP配置工具类。主要是向Spring容器中注入可以生成Advisor和创建代理对象的bean|
-##AOP联盟中定义的一些类：
+|AopConfigUtils|AOP配置工具类。主要是向Spring容器中注入可以生成Advisor和创建代理对象的bean|  
+
+##AOP联盟中定义的一些类：  
+
 |类名|作用概述|
 |----|----|
 |Advice|AOP联盟中的一个标识接口。通知和Interceptor顶级类。我们说的各种通知类型都要实现这个接口。|

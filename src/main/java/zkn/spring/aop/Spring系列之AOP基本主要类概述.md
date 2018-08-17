@@ -1,5 +1,7 @@
-  在这篇文章中我将对自己了解的AOP中的基本主要类做一个概述，可能不包括一些AOP高级用法的类以及是自己还不了解的类。会不定期的进行补充和修改。  
+  在这篇文章中我将对自己了解的AOP中的基本主要类做一个概述，可能不包括一些AOP高级用法的类以及是自己还不了解的类。会不定期的进行补充和修改。 
+  
 ##SpringAOP基础解析类  
+
 |  类名  |  作用概述  |  
 |---------|---------|  
 |AopNamespaceHandler|AOP命名空间解析类。我们在用AOP的时候，会在Spring配置文件的beans标签中引入：xmlns:aop |  
@@ -7,7 +9,9 @@
 |ConfigBeanDefinitionParser|解析&lt;aop:config /> 标签的类。同样也是在AopNamespaceHandler中创建的类。|  
 |AopNamespaceUtils|AOP命名空间解析工具类，在上面两个中被引用。|  
 |AopConfigUtils|AOP配置工具类。主要是向Spring容器中注入可以生成Advisor和创建代理对象的bean|  
+
 ##AOP联盟中定义的一些类：  
+
 |类名|作用概述|  
 |----|----|  
 |Advice|AOP联盟中的一个标识接口。通知和Interceptor顶级类。我们说的各种通知类型都要实现这个接口。|  
@@ -21,6 +25,7 @@
 ![Advice](//img-blog.csdn.net/20180318112954851?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3prbnh4/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 
 ##SpringAOP中定义的类
+
 |类名|作用概述|
 |----|----|
 |Advisor|SpringAOP中的核心类。组合了Advice。|

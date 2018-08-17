@@ -19,7 +19,8 @@
 |Joinpoint|AOP联盟中的连接点类。主要的方法是：proceed()执行下一个拦截器。getThis()获取目标对象。|
 |Invocation|AOP拦截的执行类。是Joinpoint的子类。主要方法：getArguments()获取参数。|
 |MethodInvocation|Invocation的一个重要实现类。真正执行AOP方法的拦截。主要方法：getMethod()目标方法。|
-|ConstructorInvocation|Invocation的另一个重要实现类。执行构造方法的拦截。主要方法：getConstructor()返回构造方法。|
+|ConstructorInvocation|Invocation的另一个重要实现类。执行构造方法的拦截。主要方法：getConstructor()返回构造方法。|  
+
 ![Advice](./img/advice.png)
 
 ##SpringAOP中定义的类

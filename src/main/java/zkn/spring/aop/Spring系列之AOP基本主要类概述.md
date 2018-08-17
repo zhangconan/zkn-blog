@@ -22,7 +22,7 @@
 |Invocation|AOP拦截的执行类。是Joinpoint的子类。主要方法：getArguments()获取参数。|  
 |MethodInvocation|Invocation的一个重要实现类。真正执行AOP方法的拦截。主要方法：getMethod()目标方法。|  
 |ConstructorInvocation|Invocation的另一个重要实现类。执行构造方法的拦截。主要方法：getConstructor()返回构造方法。|  
-![Advice](//img-blog.csdn.net/20180318112954851?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3prbnh4/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![Advice](https://img-blog.csdn.net/20180318112954851?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3prbnh4/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 
 ##SpringAOP中定义的类
 

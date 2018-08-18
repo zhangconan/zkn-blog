@@ -1,6 +1,6 @@
 我们在上一篇文章中简单的说了一下SpringAOP使用JDK动态代理生成目标对象的过程，我们在这一篇文章中说一下SpringAOP对生成的动态代理对象的方法的拦截过程(即SpringAOP拦截过程)，这个分析的过程可能会比较长。
 在上一篇文章中我们说的使用JDK创建动态代理对象是用的JdkDynamicAopProxy这个类，这个类同时实现了InvocationHandler这个接口，实现了它的invoke方法，熟悉JDK动态代理的同学都知道，当我们调用动态代理对象的方法的时候，会进入到生成代理对象时所传入的InvocationHandler实现类的invoke方法中，在这里也就是指JdkDynamicAopProxy的invoke方法，我们进入到这个invoke方法中看一下：
-```
+```java
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		MethodInvocation invocation;
@@ -86,7 +86,7 @@
 在上面的方法中大致了说明了一下整个代理对象方法调用的执行过程，像equals和hashcode方法的调用，Advised子类的调用。重点就是在连接点处执行不同的通知类型的调用，即获取AOP拦截执行链的调用。下面我们要分析的就是这个过程：
 this.advised.getInterceptorsAndDynamicInterceptionAdvice。
 我们这里的advised是一个AdvisedSupport类型的实例，它可能是ProxyFactory的实例也可能是AspectJProxyFactory实例。我们进入到getInterceptorsAndDynamicInterceptionAdvice这个方法中去看一下：
-```
+```java
 	public List<Object> getInterceptorsAndDynamicInterceptionAdvice(Method method, Class<?> targetClass) {
 		//创建一个method的缓存对象 在MethodCacheKey中实现了equals和hashcode方法同时还实现了compareTo方法
 		MethodCacheKey cacheKey = new MethodCacheKey(method);
@@ -102,7 +102,7 @@ this.advised.getInterceptorsAndDynamicInterceptionAdvice。
 	}
 ```
 上面的方法的调用过程是先从缓存中获取，缓存中获取不到的话，再交给AdvisorChainFactory，通过调用AdvisorChainFactory中的getInterceptorsAndDynamicInterceptionAdvice方法来获取拦截器执行链，放入到缓存中。AdvisorChainFactory在SpringAOP中只有一个默认的实现类：DefaultAdvisorChainFactory，所以我们去这个DefaultAdvisorChainFactory类中看一下这个方法的内容。
-```
+```java
 	//在这个方法中传入了三个实例，一个是Advised的实例 一个是目标方法 一个是目标类可能为null
 	//想想我们在前面的文章中说过的，在Advised中都有什么内容
 	@Override
@@ -173,7 +173,7 @@ this.advised.getInterceptorsAndDynamicInterceptionAdvice。
 如果是IntroductionAdvisor引介增强类型，则判断此Advisor是否适用于此目标方法
 如果以上都不是，则直接转换为Interceptor类型。
 在上面的三个步骤中都干了这样的一件事，**将Advisor转换为Interceptor类型**。这里用到了一个很重要的一个类：DefaultAdvisorAdapterRegistry。从类名我们可以看出这是一个Advisor的适配器注册类。它的源码如下：
-```
+```java
 public class DefaultAdvisorAdapterRegistry implements AdvisorAdapterRegistry, Serializable {
 	//初始化了一个size为3的集合 因为下面就添加了三个AdvisorAdapter
 	private final List<AdvisorAdapter> adapters = new ArrayList<AdvisorAdapter>(3);

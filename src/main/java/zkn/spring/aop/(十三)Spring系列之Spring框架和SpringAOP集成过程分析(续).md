@@ -4,7 +4,7 @@
 ![AnnotationAwareAspectJAutoProxyCreator](./img/十三章AnnotationAwareAspectJAutoProxyCreator.png)
 从上面的图中我们可以看到AnnotationAwareAspectJAutoProxyCreator这个类间接实现了BeanFactoryAware、BeanClassLoaderAware、Ordered、BeanPostProcessor接口。如果之前没有了解过Spring Bean的生命周期(或者是Spring开放的对Bean进行修改的扩展接口)的话，请点击这里查看（[Spring Bean的生命周期小析(一)](https://blog.csdn.net/zknxx/article/details/72594300)  和   [Spring Bean的生命周期小析(二)](https://blog.csdn.net/zknxx/article/details/72599147)）这里就不再多说了。上面提到的接口的实现类大多是在AbstractAutoProxyCreator这个类中实现的。Spring提供的这些关于Bean的扩展接口大大方便了我们在Bean的创建过程中对Bean进行一些修改的操作。我们按照顺序来看看AnnotationAwareAspectJAutoProxyCreator这个关系链上对这些接口的实现。
 #### AbstractAdvisorAutoProxyCreator#setBeanFactory
-```
+```java
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) {
 		//掉用父类的setBeanFactory 这里只是一个简单的赋值
@@ -36,7 +36,7 @@
 ```
 #### AbstractAutoProxyCreator#postProcessBeforeInstantiation
 这个方法可以让我们在Bean被Spring容器实例化之前提前创建Bean，如果这个方法返回的值不是null，那就中断其他类对这个接口的实现，直接返回这个创建的Bean。在AbstractAutoProxyCreator中其源码如下：
-```
+```java
 	public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
 		//得到一个缓存的key 实现是：如果是beanClass是FactoryBean类型，则在beanName前面加&
 		Object cacheKey = getCacheKey(beanClass, beanName);
@@ -72,7 +72,7 @@
 		}
 ```
 #### AspectJAwareAdvisorAutoProxyCreator#shouldSkip
-```
+```java
 	protected boolean shouldSkip(Class<?> beanClass, String beanName) {
 		// TODO: Consider optimization by caching the list of the aspect names
 		//我们重点看到是findCandidateAdvisors这个方法的内容
@@ -91,7 +91,7 @@
 	}
 ```
 ##### AnnotationAwareAspectJAutoProxyCreator#findCandidateAdvisors
-```
+```java
 	@Override
 	protected List<Advisor> findCandidateAdvisors() {
 		// Add all the Spring advisors found according to superclass rules.
@@ -159,7 +159,7 @@
 	}
 ```
 下面我们来看看BeanFactoryAspectJAdvisorsBuilder#buildAspectJAdvisors中的这个方法，从名字我们就可以看出来这是一个从BeanFactory中构建Advisor的方法。
-```
+```java
 	public List<Advisor> buildAspectJAdvisors() {
 		//所有的切面的名字 这里的处理逻辑和上面的是一样的 获取到所有的切面BeanName之后缓存起来 volatile类型的
 		List<String> aspectNames = this.aspectBeanNames;
@@ -247,7 +247,7 @@
 ```
 总结起来findCandidateAdvisors这个方法的内容就是从Spring容器中获取所有Advisor类型的Bean和切面中所有带有通知注解的方法并将其封装为Advisor。那么其实我们在AbstractAutoProxyCreator的postProcessBeforeInstantiation方法中就获取到了Spring容器中的所有Advisor。
 ##### AbstractAutoProxyCreator#postProcessAfterInstantiation 
-```
+```java
 	//通常都是返回true
 	@Override
 	public boolean postProcessAfterInstantiation(Object bean, String beanName) {
@@ -255,7 +255,7 @@
 	}
 ```
 #### AbstractAutoProxyCreator#postProcessPropertyValues
-```
+```java
 	@Override
 	public PropertyValues postProcessPropertyValues(
 			PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName) {
@@ -264,7 +264,7 @@
 	}
 ```
 #### AbstractAutoProxyCreator#postProcessBeforeInitialization
-```
+```java
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) {
 		//不做处理原样返回
@@ -273,7 +273,7 @@
 ```
 ##### AbstractAutoProxyCreator#postProcessAfterInitialization
 这个方法需要重点分析一下了
-```
+```java
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 		  if (bean != null) {
 			//获取缓存的key

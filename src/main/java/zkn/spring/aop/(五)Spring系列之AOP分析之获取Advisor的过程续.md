@@ -1,5 +1,5 @@
 我们在这一章中继续上一章的分析。我们在上一章中说到了获取到了切面类中所有不带@Pointcut注解的方法，我们看看Spring对我们获取到的这些方法进行了什么操作：
-```
+```java
 for (Method method : getAdvisorMethods(aspectClass)) {
 	//循环切面中所有不带@Pointcut注解的方法。 
 	//method 切面中不带@Pointcut注解的方法
@@ -14,7 +14,7 @@ for (Method method : getAdvisorMethods(aspectClass)) {
 }
 ```
 getAdvisor
-```
+```java
 	public Advisor getAdvisor(Method candidateAdviceMethod, MetadataAwareAspectInstanceFactory aspectInstanceFactory,
 			int declarationOrderInAspect, String aspectName) {
 		//验证切面类 见我们上一章的分析
@@ -39,7 +39,7 @@ getAdvisor
 我们先来看一下AspectJExpressionPointcut这个类的UML类图：
 ![AspectJExpressionPointcut](./img/五章AspectJExpressionPointcut.png)
 **在AspectJExpressionPointcut这个类中主要实现了以下这四大接口：ClassFilter、BeanFactoryAware、MethodMatcher、Pointcut**。Pointcut是SpringAOP中定义的接口，用来表示切面的抽象。BeanFactoryAware也是SpringIOC中一个常见的接口，用来设置BeanFactory实例。ClassFilter和MethodMatcher是SpringAOP中定义的进行Advisor匹配的接口。ClassFilter用来此Advisor是否使用于目标类。MethodMatcher用来匹配此Advisor是否可以作用于目标类中的目标方法。那么AspectJExpressionPointcut这个类就拥有了一下功能：从BeanFactory中获取Bean、拥有切点表达式、可以用来判断此切点表达式方法是否适用于目标类、此切点表达式方法是否适用于目标类中的方法。OK，我们继续看生成AspectJExpressionPointcut的过程。
-```
+```java
 	private AspectJExpressionPointcut getPointcut(Method candidateAdviceMethod, Class<?> candidateAspectClass) {
 		//方法上是否存在切面注解(通知类型注解) 即方法上是否有
 		//@Before, @Around, @After, @AfterReturning, @AfterThrowing, @Pointcut注解
@@ -61,7 +61,7 @@ getAdvisor
 	}
 ``` 
 在这里我们要看一下AspectJAnnotation这个类。这个类是AbstractAspectJAdvisorFactory中的内部类。从这个类中可以获取切点表达式和通知类型。
-```
+```java
 	protected static class AspectJAnnotation<A extends Annotation> {
 		//切点表达式所在的属性  poincut会覆盖value的值 
 		//其实这里指的是 通知类型注解中的属性
@@ -121,7 +121,7 @@ getAdvisor
 		}
 ```
 **我们把上面获取Advisor的过程总结一下：循环切面类中的所有不带@Pointcut注解的方法，接着判断切面类的方法上是否有：@Before, @Around, @After, @AfterReturning, @AfterThrowing, @Pointcut注解。如果没有的话，循环下一个方法。如果有这些注解的话，则从这些注解中获取切点表达式存放到AspectJExpressionPointcut对象中，最后将获取到的切点表达式类封装到InstantiationModelAwarePointcutAdvisorImpl这个类中**。从上面的分析我们知道InstantiationModelAwarePointcutAdvisorImpl类至少拥有：切点表达式类、切面对象、带有切点表达式的方法、ReflectiveAspectJAdvisorFactory实例。那么我们最后来分析一下InstantiationModelAwarePointcutAdvisorImpl这个类。
-```
+```java
 	public InstantiationModelAwarePointcutAdvisorImpl(AspectJExpressionPointcut declaredPointcut,
 			Method aspectJAdviceMethod, AspectJAdvisorFactory aspectJAdvisorFactory,
 			MetadataAwareAspectInstanceFactory aspectInstanceFactory, int declarationOrder, String aspectName) {

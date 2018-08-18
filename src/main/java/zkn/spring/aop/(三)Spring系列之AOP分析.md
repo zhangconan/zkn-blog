@@ -6,7 +6,7 @@ Advised：关联了Advisor和TargetSource的类。也是AOP中一个很关键的
 ![Advised_Advisor_Advice](./img/三章Advised_Advisor_Advice.png)
 下面我们先写一个使用SpringAOP的小例子，这里使用了AspectJ中的语法。小例子如下：
 先定义一个切面类和一个前置通知：
-```
+```java
 @Aspect
 public class AopAdviceConfig {
 
@@ -47,7 +47,7 @@ public class AspectJServiceImpl implements AspectJService {
 }
 ```
 我们用编程的方式去进行一个AOP的拦截功能。
-```
+```java
 public class AspectJProxyFactoryLearn {
 
     public static void main(String[] args) {
@@ -70,7 +70,7 @@ public class AspectJProxyFactoryLearn {
 在进行AspectJProxyFactory分析之前先来看一下AspectJProxyFactory的UML类图：
 ![AspectJProxyFactory](./img/三章AspectJProxyFactory.png)
 AspectJProxyFactory的类图如上所示，我们可以看到它是Advised的一个子类。先把这个图印在脑子里。我们先来看第一段代码：
-```
+```java
 AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(aspectJService);
 //对应的AspectJProxyFactory构造函数的内容
 public AspectJProxyFactory(Object target) {
@@ -81,7 +81,7 @@ public AspectJProxyFactory(Object target) {
 ```
 当我们调用AspectJProxyFactory的有参构造函数时，它做了这几件事，检测目标对象不能为null，设置目标对象的所有的接口，设置目标对象。
 获取类上的所有的接口是通过调用ClassUtils.getAllInterfaces来获取的。**这个方法可以获取类上的所有接口，包括父类上的接口，但是它不能获取接口的接口**。意思是如果：类A继承了类B，类B实现了接口C，接口C继承了接口D，如果传入的参数是类A，**这里是可以获取到接口C，但是获取不到接口D的**。
-```
+```java
 	//AdvisedSupport中添加接口信息
 	public void setInterfaces(Class<?>... interfaces) {
 		Assert.notNull(interfaces, "Interfaces must not be null");
@@ -125,7 +125,7 @@ public AspectJProxyFactory(Object target) {
 	}
 ```
 设置目标对象
-```
+```java
 	public void setTarget(Object target) {
 		//注意这里是将目标对象封装为了 SingletonTargetSource 是一个单例的
 		//这里一定要记着 SingletonTargetSource中存放的是我们的目标对象 不是代理对象

@@ -1,12 +1,12 @@
 我们在之前的文章中分析了Advisor的生成过程以及在Advisor中生成Advise的过程。在这一篇文章中我们说一下为目标类挑选合适的Advisor的过程。通过之前的分析我们知道，一个切面类可以生成多个Advisor(多个切面类的话那就更多多的Advisor了)，这些Advisor是否都能适用于我们的目标类呢？这就需要通过Advisor中所拥有的Pointcut来进行判断了。先回到我们最开始的例子：
-```
+```java
 //手工创建一个实例
 AspectJService aspectJService = new AspectJServiceImpl();
 //使用AspectJ语法 自动创建代理对象
 AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(aspectJService);
 ```
 我们在我们的AspectJProxyFactory中传入了我们的目标对象。我们再回到AspectJProxyFactory的addAdvisorsFromAspectInstanceFactory方法中。
-```
+```java
 	private void addAdvisorsFromAspectInstanceFactory(MetadataAwareAspectInstanceFactory instanceFactory) {
 		//获取Advisor的过程我们在之前分析了
 		List<Advisor> advisors = this.aspectFactory.getAdvisors(instanceFactory);
@@ -20,7 +20,7 @@ AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(aspectJService
 ```
 在AspectJProxyFactory中是通过调用AopUtils中的findAdvisorsThatCanApply方法来为目标类挑选合适的Advisor的或者是进判断哪些Advisor可以作用于目标类。在这个方法中传入了两个参数，一个参数是Advisor的集合，一个参数是目标类Class。我们看一下getTargetClass()这个方法的内容：
 AdvisedSupport#getTargetClass
-```
+```java
 	@Override
 	public Class<?> getTargetClass() {
 		//直接调用targetSource的getTargetClass方法
@@ -29,7 +29,7 @@ AdvisedSupport#getTargetClass
 	}
 ```
 OK，下面我们进入到AopUtils#findAdvisorsThatCanApply中看一下这个方法的内容
-```
+```java
 	public static List<Advisor> findAdvisorsThatCanApply(List<Advisor> candidateAdvisors, Class<?> clazz) {
 		//如果传入的Advisor集合为空的话，直接返回这个空集合
 		//这里没有判断candidateAdvisors不为null的情况 因为在获取Advisor的地方是先创建一个空的集合，再进行添加Advisor的动作
@@ -64,7 +64,7 @@ OK，下面我们进入到AopUtils#findAdvisorsThatCanApply中看一下这个方
 	}
 ```
 canApply方法的内容
-```
+```java
 	public static boolean canApply(Advisor advisor, Class<?> targetClass, boolean hasIntroductions) {
 		//如果是IntroductionAdvisor的话，则调用IntroductionAdvisor类型的实例进行类的过滤
 		//这里是直接调用的ClassFilter的matches方法
@@ -84,7 +84,7 @@ canApply方法的内容
 	}
 ```
 重载canApply方法的内容。
-```
+```java
 	public static boolean canApply(Pointcut pc, Class<?> targetClass, boolean hasIntroductions) {
 		Assert.notNull(pc, "Pointcut must not be null");
 		//进行切点表达式的匹配最重要的就是 ClassFilter 和 MethodMatcher这两个方法的实现。
@@ -129,7 +129,7 @@ canApply方法的内容
 	}
 ```
 从上面的代码来看，这次我们要分析的重点就在AspectJExpressionPointcut这个类中了。在AspectJExpressPointcut中预先初始化了这些内容：你能看出来这是什么内容吗？
-```
+```java
 	static {
 		//execution
 		SUPPORTED_PRIMITIVES.add(PointcutPrimitive.EXECUTION);
@@ -150,12 +150,12 @@ canApply方法的内容
 	}
 ```
 我们来看一下这段代码，这是要从AspectJExpressPointcut中获取ClassFilter
-```
+```java
 		if (!pc.getClassFilter().matches(targetClass)) {
 			return false;
 		}
 ```
-```
+```java
 	public ClassFilter getClassFilter() {
 		checkReadyToMatch();
 		return this;

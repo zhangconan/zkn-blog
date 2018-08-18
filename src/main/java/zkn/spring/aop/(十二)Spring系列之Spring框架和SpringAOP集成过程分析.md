@@ -1,6 +1,6 @@
 转载请注明出处：https://blog.csdn.net/zknxx/article/details/80724180
 在开始这个系列之前大家先想一下我们是怎么在项目中使用SpringAOP的(这里的分析都是基于AspectJ注解的)。我们需要在我们的Spring配置文件中引入SpringAOP的命名空间和标签，然后定义切面Bean，进行AOP配置。大概如下所示：
-```
+```java
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,11 +19,11 @@
 我们在使用Spring中不同的功能的时候可能会引入不同的命名空间比如xmlns:context，xmlns:aop，xmlns:tx等等。关于命名空间的东西我们这里先不多说。在Spring中定义了一个这样的抽象类专门用来解析不同的命名空间。这个类是NamespaceHandler，我们看一下这个和这个类相关的一些子类：
 ![NamespaceHandler](./img/十二章NamespaceHandler.png)
 在不同的命名空间实现类中定义了不同类型的实现类，这些实现类主要是用来初始化一些解析对应的标签的类。比如我们接下来要分析的AopNamespaceHandler这个类。在上面关于AOP的配置中，我们使用了一个AOP的标签：
-```
+```java
 <aop:aspectj-autoproxy/>
 ```
 为什么我们只要使用这个标签，就可以使用SpringAOP的功能呢？看一下AopNamespaceHandler这个类的内容你就会明白了：
-```
+```java
 public class AopNamespaceHandler extends NamespaceHandlerSupport {
 
 	@Override
@@ -44,7 +44,7 @@ public class AopNamespaceHandler extends NamespaceHandlerSupport {
 ```
 PS：每个框架对应的NamespaceHandler就是你分析Spring中的对应框架的关键入口。
 下面我们来分析一下AspectJAutoProxyBeanDefinitionParser这个类。先看一下它的parse方法。
-```
+```java
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
 		//这个地方是向ApplicationContext中注入使用AspectJ注解自动创建代理对象的bean
 		AopNamespaceUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(parserContext, element);
@@ -53,7 +53,7 @@ PS：每个框架对应的NamespaceHandler就是你分析Spring中的对应框�
 	}
 ```
 AopNamespaceUtils#registerAspectJAnnotationAutoProxyCreatorIfNecessary的方法内容如下：
-```
+```java
 	public static void registerAspectJAnnotationAutoProxyCreatorIfNecessary(
 			ParserContext parserContext, Element sourceElement) {
 		//parserContext.getRegistry()这个是获取到的全局的BeanDefinitionRegistry
@@ -66,7 +66,7 @@ AopNamespaceUtils#registerAspectJAnnotationAutoProxyCreatorIfNecessary的方法�
 	}
 ```
 AopConfigUtils#registerAspectJAnnotationAutoProxyCreatorIfNecessary  
-``` 
+```java 
 	public static BeanDefinition registerAspectJAnnotationAutoProxyCreatorIfNecessary(BeanDefinitionRegistry registry, Object source) 	{
 		//这里传入了一个AnnotationAwareAspectJAutoProxyCreator的class
 		return registerOrEscalateApcAsRequired(AnnotationAwareAspectJAutoProxyCreator.class, registry, source);
@@ -100,7 +100,7 @@ AopConfigUtils#registerAspectJAnnotationAutoProxyCreatorIfNecessary
 	}
 ``` 
 我们上面提到了一个优先级的东西，那这个优先级是在哪儿定义的呢？在AopConfigUtils中有这样的一段代码：
-```
+```java
 	static {
 		APC_PRIORITY_LIST.add(InfrastructureAdvisorAutoProxyCreator.class);
 		APC_PRIORITY_LIST.add(AspectJAwareAdvisorAutoProxyCreator.class);
@@ -108,7 +108,7 @@ AopConfigUtils#registerAspectJAnnotationAutoProxyCreatorIfNecessary
 	}
 ```
 在AopConfigUtils初始化的时候就会向APC_PRIORITY_LIST中添加这三个Class类。而上面提到的优先级就是他们在APC_PRIORITY_LIST中的位置。由此可见AspectJAwareAdvisorAutoProxyCreator会覆盖InfrastructureAdvisorAutoProxyCreatorBeanDefinition中的class，而AnnotationAwareAspectJAutoProxyCreator又会覆盖AspectJAwareAdvisorAutoProxyCreator的BeanDefinition中的class(当然也会覆盖InfrastructureAdvisorAutoProxyCreator的BeanDefinition)。而我们在上面传入的Class是AnnotationAwareAspectJAutoProxyCreator，即是优先级最大的Class。说了半天，这三个Class都有什么用呢？和我们今天说的SpringAOP又有什么关系呢？通过上面的分析，我们只知道使用
-```
+```java
 <aop:aspectj-autoproxy/>
 ```
 会向BeanDefinitionRegistry中注入一个beanClass为AnnotationAwareAspectJAutoProxyCreator的Bean。

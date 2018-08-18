@@ -1,11 +1,11 @@
 我们在之前的文章中说了Advisor的创建过程，Advice的创建过程以及为目标类挑选合适的Advisor的过程。通过之前的分析我们知道，SpringAOP将切面类中的通知方法都封装成了一个个的Advisor，这样就统一了拦截方法的调用过程。我们在这一篇文章中说一下SpringAOP中代理对象的创建过程。先看下面的一张图：
 ![AopProxy](https://img-blog.csdn.net/20180330221910312?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3prbnh4/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 在SpringAOP中提供了两种创建代理对象的方式，一种是JDK自带的方式创建代理对象，另一种是使用Cglib的方式创建代理对象。所以在SpringAOP中抽象了一个AopProxy接口，这个接口有两个实现类：JDKDynamicAopProxy和CglibAopProxy。从名字我们应该能看出来这两个类的作用了吧。在为目标类创建代理对象的时候，根据我们的目标类型和AOP的配置信息选择不同的创建代理对象的方式。在SpringAOP中创建代理对象没有直接依赖AopProxy，而是又抽象了一个AopProxyFactory的接口，通过这个接口（工厂模式）来创建代理对象。下面我们来看看具体的创建过程。在开篇的文章中我们写了这样的一段代码来获取代理对象：
-```
+```java
  //aspectJProxyFactory是AspectJProxyFactory实例
  AspectJService proxyService = aspectJProxyFactory.getProxy();
 ```
-```
+```java
  //从这段代码中我们可以看到这里又调用了createAopProxy()的方法
  //通过调用createAopProxy()生成的对象调用getProxy()方法生成代理对象
  public <T> T getProxy() {
@@ -30,7 +30,7 @@ public AopProxyFactory getAopProxyFactory() {
 ![Advised](https://img-blog.csdn.net/20180330224725401?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3prbnh4/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 从上面的图中我们可以看到AdvisedSupport继承了ProxyConfig类实现了Advised接口。如果你去翻看这两个类的代码的话，会发现在Advised中定义了一些列的方法，而在ProxyConfig中是对这些接口方法的一个实现，但是Advised和ProxyConfig却是互相独立的两个类。但是SpringAOP通过AdvisedSupport将他们适配到了一起。AdvisedSupport只有一个子类，这个子类就是ProxyCreatorSupport。从这两个类的名字我们可以看到他们的作用：一个是为Advised提供支持的类，一个是为代理对象的创建提供支持的类。还记得在Advised中有什么内容吗？
 我们去DefaultAopProxyFactory中看一下调用createAopProxy(this)这个方法的时候发生了什么：
-```
+```java
 	//注意 这里传入了一个参数 AdvisedSupport   
 	public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException {
 		//这段代码用来判断选择哪种创建代理对象的方式
@@ -61,7 +61,7 @@ public AopProxyFactory getAopProxyFactory() {
 	}
 ```
 我们先看JdkDynamicAopProxy生成代理对象的方法。在上面的代理中创建JdkDynamicAopProxy对象的时候，传入了AdvisedSupport对象。
-```
+```java
 	public JdkDynamicAopProxy(AdvisedSupport config) throws AopConfigException {
 		Assert.notNull(config, "AdvisedSupport must not be null");
 		//如果不存在Advisor或者目标对象为空的话 抛出异常
@@ -71,7 +71,7 @@ public AopProxyFactory getAopProxyFactory() {
 		this.advised = config;
 	}
 ```
-```
+```java
 	//这两个方法的区别是否传入类加载器
 	@Override
 	public Object getProxy() {

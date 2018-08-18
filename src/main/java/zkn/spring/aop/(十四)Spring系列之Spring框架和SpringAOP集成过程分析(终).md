@@ -1,6 +1,6 @@
 转载请注明出处：https://blog.csdn.net/zknxx/article/details/80808447
 在这篇文章中我们接着上一篇的文章说。在上一篇文章中我们提到了getAdvicesAndAdvisorsForBean这个方法，这个方法的内容是为目标对象挑选合适的Advisor类，其源码如下：
-```
+```java
 	//targetSource 为null
 	protected Object[] getAdvicesAndAdvisorsForBean(Class<?> beanClass, String beanName, TargetSource targetSource) {
 		List<Advisor> advisors = findEligibleAdvisors(beanClass, beanName);
@@ -26,7 +26,7 @@
 	}
 ```
 最后我们再看看目标对象的创建过程：
-```
+```java
 	//specificInterceptors 上面的方法中获取到的Advisor 
 	//targetSource 为 new SingletonTargetSource(bean) 
 	//将Spring容器中创建出来的bean封装为了SingletonTargetSource

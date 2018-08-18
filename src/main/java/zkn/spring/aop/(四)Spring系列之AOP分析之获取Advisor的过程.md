@@ -1,6 +1,6 @@
 我们在这篇文章中接着上一篇文章的分析。我们在上一篇文章中分析了创建AspectJProxyFactory，并向AspectJProxyFactory中添加目标对象和获取目标对象的过程。我们在这一篇文章中分析调用addAspect方法添加切面的过程。
 在AspectJProxyFactory中有两个addAspect重载方法，一个入参是切面实例对象，一个入参是切面类对象。他们两个的区别是：传入实例对象的方法会将实例对象封装为一个单例不再进行切面对象的场景，传入切面类对象的方法需要创建切面对象实例。我们分析入参为切面类对象的方法。代码如下：
-```
+```java
 	public void addAspect(Class<?> aspectClass) {
 		//全限定类名
 		String aspectName = aspectClass.getName();
@@ -14,7 +14,7 @@
 ```
 上面的代码只调用了createAspectMetadata、createAspectInstanceFactory、addAdvisorsFromAspectInstanceFactory这三个方法，但是这个过程却是很复杂的。我们先看createAspectMetadata这个方法。
 我们先看看AspectMetadata 这个类是个什么东西。
-```
+```java
 public class AspectMetadata implements Serializable {
 	
 	/**
@@ -40,7 +40,7 @@ public class AspectMetadata implements Serializable {
 ```
 AspectMetadata这个类中主要存储了切面类的名字、切面类对象和AspectJ中定义的存储切面类Class对象的类以及SpringAOP中的切点表达式。
 createAspectMetadata方法的内容如下：
-```
+```java
 	private AspectMetadata createAspectMetadata(Class<?> aspectClass, String aspectName) {
 		//直接调用 AspectMetadata的构造函数  创建对象 入参为：切面类和切面类的全限定类名
 		AspectMetadata am = new AspectMetadata(aspectClass, aspectName);
@@ -55,7 +55,7 @@ createAspectMetadata方法的内容如下：
 	}
 ```
 AspectMetadata的构造函数: 在这个构造函数里主要是查找带有@Aspect注解的类。获取@Aspect类的PerClause类型。正常都是SINGLETON。
-```
+```java
 	public AspectMetadata(Class<?> aspectClass, String aspectName) {
 		//传入的切面类名直接赋值
 		this.aspectName = aspectName;
@@ -98,7 +98,7 @@ AspectMetadata的构造函数: 在这个构造函数里主要是查找带有@Asp
 	}
 ```
 我们在看createAspectInstanceFactory这个方法的内容：
-```
+```java
 	private MetadataAwareAspectInstanceFactory createAspectInstanceFactory(
 			AspectMetadata am, Class<?> aspectClass, String aspectName) {
 
@@ -124,7 +124,7 @@ AspectMetadata的构造函数: 在这个构造函数里主要是查找带有@Asp
 这个方法主要是创建了一个MetadataAwareAspectInstanceFactory 的子类。用来组合切面实例对象和切面元数据。面向接口编程的一个很好的体现(依赖倒转)。MetadataAwareAspectInstanceFactory有很多子类，在不同的场景下创建不同用途的实例。其UML类图如下：
 ![MetadataAwareAspectInstanceFactory](./img/四章MetadataAwareAspectInstanceFactory.png)
 我们先看创建SingletonMetadataAwareAspectInstanceFactory的构造函数：
-```
+```java
 	public SingletonMetadataAwareAspectInstanceFactory(Object aspectInstance, String aspectName) {
 		//将切面实例传入到父类构造函数中
 		super(aspectInstance);
@@ -133,7 +133,7 @@ AspectMetadata的构造函数: 在这个构造函数里主要是查找带有@Asp
 	}
 ```
 addAdvisorsFromAspectInstanceFactory这个方法，应该是我们这次要分析的重点方法了，获取Advisor的逻辑都在这个方法中。其代码如下：
-```
+```java
 	private void addAdvisorsFromAspectInstanceFactory(MetadataAwareAspectInstanceFactory instanceFactory) {
 		//使用ReflectiveAspectJAdvisorFactory从MetadataAwareAspectInstanceFactory中获取Advisor
 		List<Advisor> advisors = this.aspectFactory.getAdvisors(instanceFactory);
@@ -150,7 +150,7 @@ addAdvisorsFromAspectInstanceFactory这个方法，应该是我们这次要分�
 ![AspectJAdvisorFactory](./img/四章AspectJAdvisorFactory.png)
 AbstractAspectJAdvisorFactory和ReflectiveAspectJAdvisorFactory中很重要的类。他们的重要性在我们后面的分析中会慢慢的体现出来。
 ReflectiveAspectJAdvisorFactory中的getAdvisors方法内容如下：
-```
+```java
 	public List<Advisor> getAdvisors(MetadataAwareAspectInstanceFactory aspectInstanceFactory) {
 		//切面类  这个我们在上说过  是一个带有Aspect注解的类。不一定就是我们调用addAspect传入的类 可能是其父类
 		Class<?> aspectClass = aspectInstanceFactory.getAspectMetadata().getAspectClass();
@@ -185,7 +185,7 @@ ReflectiveAspectJAdvisorFactory中的getAdvisors方法内容如下：
 	}
 ```
 继续getAdvisors方法中下面的内容
-```
+```java
 	//将我们上一步获取的MetadataAwareAspectInstanceFactory实例又包装为LazySingletonAspectInstanceFactoryDecorator
 	//装饰模式的一个使用
 	//确保只能获取到一个切面实例

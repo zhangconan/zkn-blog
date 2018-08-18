@@ -1,7 +1,7 @@
 转载请注明出处：https://blog.csdn.net/zknxx/article/details/80261327
 我们在上一篇文章中说到了前置通知的方法调用AspectJMethodBeforeAdvice#before，在这个before方法中又调用了invokeAdviceMethod这个方法，invokeAdviceMethod这个方法在AspectJMethodBeforeAdvice的父类AbstractAspectJAdvice中。AbstractAspectJAdvice这个是Aspect的所有通知类型的共同父类。关于AbstractAspectJAdvice中的invokeAdviceMethod方法，有两个重载的方法。前置通知、后置通知、异常通知、后置返回通知都是用的AbstractAspectJAdvice#invokeAdviceMethod(org.aspectj.weaver.tools.JoinPointMatch, java.lang.Object, java.lang.Throwable)这个方法，环绕通知用的是：AbstractAspectJAdvice#invokeAdviceMethod(org.aspectj.lang.JoinPoint, org.aspectj.weaver.tools.JoinPointMatch, java.lang.Object, java.lang.Throwable)这个方法。这两个重载方法的区别是：后置通知调用的方法多了一个JoinPoint的参数。
 invokeAdviceMethod方法的源码如下：
-```
+```java
 	//这三个参数 JoinPointMatch 都是相同的
 	//returnValue 当执行后置返回通知的时候 传值 其他为null
 	//Throwable  当执行后置异常通知的时候 传值，其他为null
@@ -16,7 +16,7 @@ invokeAdviceMethod方法的源码如下：
 	}
 ```
 我们先看getJoinPoint这个方法，其源码如下：
-```
+```java
 	protected JoinPoint getJoinPoint() {
 		return currentJoinPoint();
 	}
@@ -41,7 +41,7 @@ invokeAdviceMethod方法的源码如下：
 	}
 ```
 下面我们来看一下argBinding这个方法的作用和内容。从名字我们可以猜测这个方法的作用应该是进行参数绑定用的，我们来看一下：
-```
+```java
 	protected Object[] argBinding(JoinPoint jp, JoinPointMatch jpMatch, Object returnValue, Throwable ex) {
 		calculateArgumentBindings();
 
@@ -94,7 +94,7 @@ invokeAdviceMethod方法的源码如下：
 	}
 ```
 calculateArgumentBindings
-```
+```java
 	public synchronized final void calculateArgumentBindings() {
 		// The simple case... nothing to bind.
 		//通知方法没有参数直接返回
@@ -120,7 +120,7 @@ calculateArgumentBindings
 	}
 ```
 这里还有再说一下AbstractAspectJAdvice这个类的构造函数，这个类只有这一个构造函数
-```
+```java
 	public AbstractAspectJAdvice(
 			Method aspectJAdviceMethod, AspectJExpressionPointcut pointcut, AspectInstanceFactory aspectInstanceFactory) {
 		//通知方法不能为空
@@ -140,7 +140,7 @@ calculateArgumentBindings
 	}
 ```
 在创建通知类实例的时候，进行了上面的赋值的动作，把和通知相关的方法都传了进来。最后我们来看一下invokeAdviceMethodWithGivenArgs这个方法的内容：
-```
+```java
 	protected Object invokeAdviceMethodWithGivenArgs(Object[] args) throws Throwable {
 		Object[] actualArgs = args;
 		//判断通知方法是否有参数

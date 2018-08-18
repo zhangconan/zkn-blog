@@ -1,5 +1,5 @@
 我们在上一篇文章中简单的说了调用动态代理对象方法的过程，也说了AOP拦截器执行链的生成过程。我们接着说AOP对目标对象的拦截过程。下面的代码是我们要分析的重点：
-```
+```java
 //proxy:生成的动态代理对象
 //target:目标对象
 //method:目标方法
@@ -60,7 +60,7 @@ protected ReflectiveMethodInvocation(
 	}
 ```
 invokeJoinpoint方法
-```
+```java
 	protected Object invokeJoinpoint() throws Throwable {
 		//this.target 目标对象
 		//this.method 目标方法
@@ -99,7 +99,7 @@ OK，我们在proceed()这个方法中看到了AOP对于目标方法的一个拦
 ![MethodInterceptor](https://img-blog.csdn.net/20180426235354889?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3prbnh4/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 从上图我们也可以看到不同的通知其实相当于不同的MethodInterceptor类型。像前置通知会交给：MethodBeforeAdviceInterceptor来进行处理，后置通知是由AspectJAfterAdvice来处理的，环绕通知是由AspectJAroundAdvice来处理的。我们也挑几个通知类型来说一下具体的调用过程。先说一下前置通知：
 MethodBeforeAdviceInterceptor
-```
+```java
 //实现了MethodInterceptor接口
 public class MethodBeforeAdviceInterceptor implements MethodInterceptor, Serializable {
 	//这个对象的获取参考这个方法org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory#getAdvice
@@ -123,7 +123,7 @@ public class MethodBeforeAdviceInterceptor implements MethodInterceptor, Seriali
 }
 ```
 AspectJMethodBeforeAdvice#before代码如下：
-```
+```java
 	@Override
 	public void before(Method method, Object[] args, Object target) throws Throwable {
 		//这里传进来的目标对象、目标参数、目标方法都没有用到

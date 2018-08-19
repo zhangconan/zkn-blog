@@ -16,3 +16,6 @@
 [(十二)Spring系列之Spring框架和SpringAOP集成过程分析](https://github.com/zhangconan/zkn-blog/blob/master/src/main/java/zkn/spring/aop/(%E5%8D%81%E4%BA%8C)Spring%E7%B3%BB%E5%88%97%E4%B9%8BSpring%E6%A1%86%E6%9E%B6%E5%92%8CSpringAOP%E9%9B%86%E6%88%90%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90.md)  
 [(十三)Spring系列之Spring框架和SpringAOP集成过程分析(续)](https://github.com/zhangconan/zkn-blog/blob/master/src/main/java/zkn/spring/aop/(%E5%8D%81%E4%B8%89)Spring%E7%B3%BB%E5%88%97%E4%B9%8BSpring%E6%A1%86%E6%9E%B6%E5%92%8CSpringAOP%E9%9B%86%E6%88%90%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90(%E7%BB%AD).md)  
 [(十四)Spring系列之Spring框架和SpringAOP集成过程分析(终)](https://github.com/zhangconan/zkn-blog/blob/master/src/main/java/zkn/spring/aop/(%E5%8D%81%E5%9B%9B)Spring%E7%B3%BB%E5%88%97%E4%B9%8BSpring%E6%A1%86%E6%9E%B6%E5%92%8CSpringAOP%E9%9B%86%E6%88%90%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90(%E7%BB%88).md)  
+### bean
+[Spring系列之FactoryBean](https://github.com/zhangconan/zkn-blog/blob/master/src/main/java/zkn/spring/bean/20180819(1)Spring%E7%B3%BB%E5%88%97%E4%B9%8BFactoryBean.md)  
+[Spring系列之FactoryBean(续)](https://github.com/zhangconan/zkn-blog/blob/master/src/main/java/zkn/spring/bean/20180819(2)Spring%E7%B3%BB%E5%88%97%E4%B9%8BFactoryBean(%E7%BB%AD).md)

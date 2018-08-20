@@ -19,3 +19,7 @@
 ### bean
 [Spring系列之FactoryBean](https://github.com/zhangconan/zkn-blog/blob/master/src/main/java/zkn/spring/bean/20180819(1)Spring%E7%B3%BB%E5%88%97%E4%B9%8BFactoryBean.md)  
 [Spring系列之FactoryBean(续)](https://github.com/zhangconan/zkn-blog/blob/master/src/main/java/zkn/spring/bean/20180819(2)Spring%E7%B3%BB%E5%88%97%E4%B9%8BFactoryBean(%E7%BB%AD).md)
+
+### boot
+[SpringBoot之@EnableConfigurationProperties分析](https://github.com/zhangconan/zkn-blog/blob/master/src/main/java/zkn/spring/boot/20180820(1)SpringBoot%E4%B9%8B%40EnableConfigurationProperties%E5%88%86%E6%9E%90.md)
+

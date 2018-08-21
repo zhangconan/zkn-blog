@@ -22,6 +22,12 @@
 
 ### boot
 [SpringBoot之@EnableConfigurationProperties分析](https://github.com/zhangconan/zkn-blog/blob/master/src/main/java/zkn/spring/boot/20180820(1)SpringBoot%E4%B9%8B%40EnableConfigurationProperties%E5%88%86%E6%9E%90.md)
+[SpringBoot之浅析配置项解析（一）](https://blog.csdn.net/zknxx/article/details/78994813)  
+[SpringBoot之浅析配置项解析（二）](https://blog.csdn.net/zknxx/article/details/79007834)  
+[SpringBoot之浅析配置项解析（三）](https://blog.csdn.net/zknxx/article/details/79028922)  
+[SpringBoot之浅析配置项解析（四）](https://blog.csdn.net/zknxx/article/details/79058417)  
+[SpringBoot之浅析配置项解析（五）](https://blog.csdn.net/zknxx/article/details/79069535)  
+
 ### mvc 
 [SpringMVC之分析AnnotationDrivenBeanDefinitionParser](https://github.com/zhangconan/zkn-blog/blob/master/src/main/java/zkn/spring/mvc/20180821(1)SpringMVC%E4%B9%8B%E5%88%86%E6%9E%90AnnotationDrivenBeanDefinitionParser.md)  
 [SpringMVC之分析AnnotationDrivenBeanDefinitionParser(续)](https://blog.csdn.net/zknxx/article/details/78377465)  

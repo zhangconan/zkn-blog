@@ -37,8 +37,12 @@
 [SpringBoot特性之Actuator](https://blog.csdn.net/zknxx/article/details/78576937)  
 [SpringBoot修改默认端口号](https://blog.csdn.net/zknxx/article/details/53433592)  
 [SpringBoot之浅析TomCat端口号设置](https://blog.csdn.net/zknxx/article/details/79079639)  
-
-
+[SpringBoot之添加单元测试](https://blog.csdn.net/zknxx/article/details/53244255)  
+[SpringBoot之集成Spring AOP](https://blog.csdn.net/zknxx/article/details/53240959)  
+[SpringBoot之开启Profile](https://blog.csdn.net/zknxx/article/details/77906096) 
+[SpringBoot热部署](https://blog.csdn.net/zknxx/article/details/53428669) 
+[SpringBoot加载静态资源](https://blog.csdn.net/zknxx/article/details/53414955) 
+[SpringBoot之退出服务（exit）时调用自定义的销毁方法](https://blog.csdn.net/zknxx/article/details/52204036)  
 
 ### mvc 
 [SpringMVC之分析AnnotationDrivenBeanDefinitionParser](https://github.com/zhangconan/zkn-blog/blob/master/src/main/java/zkn/spring/mvc/20180821(1)SpringMVC%E4%B9%8B%E5%88%86%E6%9E%90AnnotationDrivenBeanDefinitionParser.md)  
@@ -57,8 +61,7 @@
 [解决@ResponseBody注解返回中文乱码](https://blog.csdn.net/zknxx/article/details/52423608)  
 [SpringMVC解析JSON请求数据小析](https://blog.csdn.net/zknxx/article/details/68952518)  
 [SpringMVC使用@Valid注解进行数据验证](https://blog.csdn.net/zknxx/article/details/52426771)  
-
-
+[SpringMVC解析JSON请求数据小析](https://blog.csdn.net/zknxx/article/details/68952518)  
 
 
 
